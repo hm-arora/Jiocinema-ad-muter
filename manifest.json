@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "JioCinema-Ad-Mute",
+  "version": "1.0",
+  "description": "This extension mutes the ads on JioCinema",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.jiocinema.com/*"
+      ],
+      "js": [
+        "js/contentScript.js"
+      ]
+    }
+  ]
+}

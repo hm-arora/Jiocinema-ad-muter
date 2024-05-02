@@ -23,26 +23,24 @@ function initAdMuteFeature() {
     if (!isAdMuteEnabled) return;
     const muteBtn = document.querySelector(MUTE_BTN_SELECTOR);
     if (!muteBtn) return;
-
-    let isAdRunning = false;
-
-    setInterval(() => {
-      const adDiv = document.querySelector(AD_DIV_SELECTOR);
-      if (adDiv) {
-        if (!isAdRunning) {
-          isAdRunning = true;
-          toggleMuteState(muteBtn, true);
-        }
-      } else if (isAdRunning) {
-        // Gap b/w each ad is somewhat around 8 seconds, where ad-div may not be found
-        setTimeout(() => {
-          if (!document.querySelector(AD_DIV_SELECTOR)) {
-            isAdRunning = false;
-            toggleMuteState(muteBtn, false);
+  
+    const observer = new MutationObserver((mutationsList, observer) => {
+      for(let mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          const adDiv = document.querySelector(AD_DIV_SELECTOR);
+          if (adDiv) {
+            toggleMuteState(muteBtn, true);
+          } else {
+            setTimeout(() => {
+              if (!document.querySelector(AD_DIV_SELECTOR)) {
+                toggleMuteState(muteBtn, false);
+              }
+            }, 8000);
           }
-        }, 8000);
+        }
       }
-    }, 500);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   };
 
   const adDetectionInterval = setInterval(() => {
